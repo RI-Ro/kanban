@@ -1,0 +1,45 @@
+{
+  "name": "dnd-kit-kanban-board",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-react": "^2.3.0",
+    "@coreui/react": "^5.10.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^7.0.1",
+    "@types/bootstrap": "^5.2.10",
+    "@types/react-bootstrap": "^1.0.1",
+    "@types/react-color": "^3.0.13",
+    "@types/react-modal": "^3.16.3",
+    "@types/react-scroll": "^1.8.10",
+    "bootstrap": "^5.3.8",
+    "react": "^18.0.0",
+    "react-bootstrap": "^2.10.10",
+    "react-bootstrap-icons": "^1.11.6",
+    "react-color": "^2.19.3",
+    "react-dom": "^18.0.0",
+    "react-modal": "^3.16.3",
+    "react-router-dom": "^7.13.1",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.9",
+    "typescript": "4.4.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

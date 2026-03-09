@@ -1,0 +1,77 @@
+.Board {
+  text-align: center;
+}
+
+.input-box {
+  /* родительский блок относительно которого будем формировать положение
+  тега label */
+  position: relative;
+}
+
+input {
+  background: #fff;
+  padding: 10px;
+  /* закруглим края у поля ввода */
+  border-radius: 11px;
+  width: 250px;
+  height: 60px;
+}
+
+label {
+  position: absolute;
+  /* смещение относительно родительского элемента 10px вверх от верхнего края и   10px влево */
+  top: -10px;
+  left: 10px;
+  background: #dddddd;
+  border-radius: 7px;
+  border: 1px solid rgba(5, 5, 5, 0.3);
+  padding: 0 5px;
+}
+
+.whiteText {
+  color: #fff;
+  text-decoration: none;
+}
+
+.whiteText:hover {
+  color: #b8b7b0;
+}
+
+.block1 {
+  height: 100vh;
+  min-width: 15vw;
+  max-width: 15vw;
+  float: left;
+}
+
+.block2 {
+  height: 100vh;
+  min-width: 85vw;
+  max-width: 85vw;
+  float: left;
+}
+
+.block3 {
+  height: 100vh;
+  float: left;
+  background-color: aqua;
+}
+
+.topTitle {
+  height: 3vh;
+  background-color: #212529;
+}
+.TwitterColor {
+  margin-left: 20px;
+  margin-top: 0px;
+}
+
+.modalDelete {
+  width: 700px;
+  height: 400px;
+  background-color: rgb(240, 147, 135);
+  margin: 400px auto auto auto;
+  border-radius: 40px;
+  border-color: solid 1px rgb(214, 79, 79);
+  text-align: center;
+}

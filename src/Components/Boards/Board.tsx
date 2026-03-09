@@ -1,0 +1,259 @@
+import {
+  closestCorners,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+  DragOverEvent
+} from "@dnd-kit/core";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import Column, { ColumnType } from "./Column";
+import { MouseEventHandler, useState } from "react";
+import { ArrowLeftCircle } from "react-bootstrap-icons";
+
+const Board = ({scrollToLeft}:{scrollToLeft:MouseEventHandler}) => {
+  const data: ColumnType[] = [
+    {
+      id: "Column1",
+      title: "Новые задачи",
+      background:"#e0eceb",
+      borderTop:"rgb(247, 92, 92)",
+      cards: [
+        {
+          id: "Card1",
+          title: "Тестовая задача"
+        },
+      ],
+      deleteColumn: Function
+    },
+    {
+      id: "Важные",
+      title: "Важные",
+      background:"#e0eceb",
+      borderTop:"rgb(0, 252, 21)",
+      cards: [
+      ],
+      deleteColumn: Function
+    },
+    {
+      id: "В работе",
+      title: "В работе",
+      background:"#e0eceb",
+      borderTop:"rgb(209, 7, 7)",
+      cards: [
+      ],
+      deleteColumn: Function
+    },
+    {
+      id: "Исполнено",
+      title: "Исполнено",
+      background:"#e0eceb",
+      borderTop:"rgb(247, 92, 92)",
+      cards: [
+      ],
+      deleteColumn: Function
+    }
+  ];
+  const [columns, setColumns] = useState<ColumnType[]>(data);
+  const [addTaskValue, setaddTaskValue] = useState<string>("");
+  const [addColumnValue, setaddColumnValue] = useState<string>("");
+
+  const findColumn = (unique: string | null) => {
+    if (!unique) {
+      return null;
+    }
+    if (columns.some((c) => c.id === unique)) {
+      return columns.find((c) => c.id === unique) ?? null;
+    }
+    const id = String(unique);
+    const itemWithColumnId = columns.flatMap((c) => {
+      const columnId = c.id;
+      return c.cards.map((i) => ({ itemId: i.id, columnId: columnId }));
+    });
+    const columnId = itemWithColumnId.find((i) => i.itemId === id)?.columnId;
+    return columns.find((c) => c.id === columnId) ?? null;
+  };
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over, delta } = event;
+    const activeId = String(active.id);
+    const overId = over ? String(over.id) : null;
+    const activeColumn = findColumn(activeId);
+    const overColumn = findColumn(overId);
+    if (!activeColumn || !overColumn || activeColumn === overColumn) {
+      return null;
+    }
+    setColumns((prevState) => {
+      const activeItems = activeColumn.cards;
+      const overItems = overColumn.cards;
+      const activeIndex = activeItems.findIndex((i) => i.id === activeId);
+      const overIndex = overItems.findIndex((i) => i.id === overId);
+      const newIndex = () => {
+        const putOnBelowLastItem =
+          overIndex === overItems.length - 1 && delta.y > 0;
+        const modifier = putOnBelowLastItem ? 1 : 0;
+        return overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
+      };
+      return prevState.map((c) => {
+        if (c.id === activeColumn.id) {
+          c.cards = activeItems.filter((i) => i.id !== activeId);
+          return c;
+        } else if (c.id === overColumn.id) {
+          c.cards = [
+            ...overItems.slice(0, newIndex()),
+            activeItems[activeIndex],
+            ...overItems.slice(newIndex(), overItems.length)
+          ];
+          return c;
+        } else {
+          return c;
+        }
+      });
+    });
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    const activeId = String(active.id);
+    const overId = over ? String(over.id) : null;
+    const activeColumn = findColumn(activeId);
+    const overColumn = findColumn(overId);
+    if (!activeColumn || !overColumn || activeColumn !== overColumn) {
+      return null;
+    }
+    const activeIndex = activeColumn.cards.findIndex((i) => i.id === activeId);
+    const overIndex = overColumn.cards.findIndex((i) => i.id === overId);
+    if (activeIndex !== overIndex) {
+      setColumns((prevState) => {
+        return prevState.map((column) => {
+          if (column.id === activeColumn.id) {
+            column.cards = arrayMove(overColumn.cards, activeIndex, overIndex);
+            return column;
+          } else {
+            return column;
+          }
+        });
+      });
+    }
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  );
+
+  const AddNewTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const c = new FormData(e.currentTarget);
+    const addTask = c.get("addTask") as string;
+    if (addTask.trim() != "") {
+      const updatedData = columns[0].cards;
+      const updatedData2 = [...updatedData, {id:Date.now().toString(), title:addTask}]
+      const updateColumn = columns[0]
+      updateColumn.cards = updatedData2
+      setColumns(data => [...data.slice(0,0), updateColumn, ...data.slice(1)])
+      setaddTaskValue("")
+  }
+}
+
+
+const onChangeAddTask = (e: React.ChangeEvent<HTMLInputElement >) => {
+   setaddTaskValue(e.target.value)
+}
+
+  const AddNewColumn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const c = new FormData(e.currentTarget);
+    const addColumn = c.get("addColumn") as string;
+    if (addColumn.trim() != "") {
+      setColumns(data => [...data,     {
+      id: Date.now().toString(),
+      title: addColumn,
+      borderTop:"#49c5bc",
+      background:"#e0eceb",
+      cards: [
+      ],
+      deleteColumn: Function
+    }])
+      setaddColumnValue("")
+  }
+}
+
+
+const onChangeAddColumn = (e: React.ChangeEvent<HTMLInputElement >) => {
+   setaddColumnValue(e.target.value)
+}
+
+const deleteColumn = (ColumnIndex:string) => {
+  const position = columns.findIndex(item => item.id === ColumnIndex);
+  if (position !== -1) {
+    setColumns(columns.filter((_, index) => index !== position));
+  }
+}
+
+  return (
+    <>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
+    >
+
+      <div
+        className="Board"
+        style={{display: "flex", flexDirection: "row", padding: "20px" }}
+      >
+      
+      <div style={{marginRight:"40px",}} >
+      <form onSubmit={AddNewColumn}>
+        <div className="input-box"         
+        >
+        <label>Создать колонку</label>
+        <input name="addColumn" value={addColumnValue} onChange={onChangeAddColumn}/>
+        </div>
+      </form>
+      {
+      (columns.length > 0) &&
+        <form onSubmit={AddNewTask} style={{paddingTop:"30px"}}>
+          <div className="input-box">
+          <label>Добавить задачу</label>
+          <input name="addTask" value={addTaskValue} onChange={onChangeAddTask}/>
+          </div>
+        </form>
+      }
+      </div>
+
+        {columns.map((column) => (
+          <Column
+            key={column.id}
+            id={column.id}
+            title={column.title}
+            borderTop={column.borderTop}
+            background={column.background}
+            cards={column.cards}
+            deleteColumn={deleteColumn}
+          ></Column>
+        ))}
+        
+        {
+          (columns.length > 4 ) &&
+            <div style={{minWidth:"250px"}}
+                        onClick={scrollToLeft}
+                        >
+              <ArrowLeftCircle size="60px" className="me whiteText"/>
+            </div>
+        }
+
+      </div>
+    </DndContext>
+    </>
+  );
+}
+
+
+export default Board
