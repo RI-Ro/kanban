@@ -58,7 +58,7 @@ label {
 }
 
 .topTitle {
-  height: 3vh;
+  height: 4vh;
   background-color: #212529;
 }
 .TwitterColor {
@@ -74,4 +74,11 @@ label {
   border-radius: 40px;
   border-color: solid 1px rgb(214, 79, 79);
   text-align: center;
+}
+
+.nav-link {
+  color: #ffffff;
+}
+.nav-link:hover {
+  color: rgb(182, 182, 182);
 }

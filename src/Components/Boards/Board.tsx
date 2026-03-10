@@ -13,7 +13,7 @@ import Column, { ColumnType } from "./Column";
 import { MouseEventHandler, useState } from "react";
 import { ArrowLeftCircle } from "react-bootstrap-icons";
 
-const Board = ({scrollToLeft}:{scrollToLeft:MouseEventHandler}) => {
+const Board = ({scrollToLeft, project_id}:{scrollToLeft:MouseEventHandler, project_id:string}) => {
   const data: ColumnType[] = [
     {
       id: "Column1",
