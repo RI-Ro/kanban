@@ -22,21 +22,6 @@ function Projects ({topTitle}:{topTitle:string}){
     useEffect(() => {
         setProjects(
         [
-            {
-                id:"12345678",
-                description: 'Домашняя страница',
-                eventkey: 'Домашняя страница',
-            },
-                        {
-                id:"23456789",
-                description: '2 страница',
-                eventkey: '2 страница',
-            },
-                        {
-                id:"34567890",
-                description: '3 страница',
-                eventkey: '3 страница',
-            },
         ]
         )
         // Последняя активная вкладка у пользователя
@@ -69,7 +54,8 @@ function Projects ({topTitle}:{topTitle:string}){
     {
         (projects && (projects.length > 0)) ?
       <Tabs 
-        style={{backgroundColor:"#535353", fontSize:"16pt"}}
+        style={{backgroundColor:"#535353", 
+            fontSize:"16pt"}}
         id="controlled-tabs"
         activeKey={key || ""}
         onSelect={(k) => setKey(k)} // Приведение типа для обработчика
@@ -102,3 +88,21 @@ function Projects ({topTitle}:{topTitle:string}){
 }
 
 export default Projects;
+
+/*
+            {
+                id:"12345678",
+                description: 'Домашняя страница',
+                eventkey: 'Домашняя страница',
+            },
+                        {
+                id:"23456789",
+                description: '2 страница',
+                eventkey: '2 страница',
+            },
+                        {
+                id:"34567890",
+                description: '3 страница',
+                eventkey: '3 страница',
+            },
+*/

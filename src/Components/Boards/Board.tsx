@@ -210,7 +210,10 @@ const deleteColumn = (ColumnIndex:string) => {
       >
       
       <div style={{marginRight:"40px",}} >
-      <form onSubmit={AddNewColumn}>
+
+      <div className="settingProject">Настройки проекта</div>
+
+      <form onSubmit={AddNewColumn} style={{paddingTop:"30px"}}>
         <div className="input-box"         
         >
         <label>Создать колонку</label>

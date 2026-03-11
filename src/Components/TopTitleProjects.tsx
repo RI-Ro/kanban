@@ -1,4 +1,5 @@
 import { Calendar2PlusFill } from "react-bootstrap-icons";
+import AddProjectsModal from "./AddProjectsModal";
 import {FC} from 'react'
 
 type DataType = { 
@@ -14,30 +15,17 @@ export type ColumnType = {
   projects: DataType[] | null
 };
 
-const TopTitleProjects:FC<ColumnType> = ({topTitle,setProjects, projects,setKey}) => {
-
-    const addNewProject = () => {
-        const data_ = new Date().toISOString()
-         const foradd = 
-            {
-                id:`${data_}`,
-                description: `${data_} Домашняя страница`,
-                eventkey: `${data_} Домашняя страница`,
-            }
-        const __add = projects
-        __add?.push(foradd)
-        setProjects(__add)
-        // Обновляем ключ и переключаемся на новую вкладку
-        setKey(`${data_} Домашняя страница`)
-    }
+const TopTitleProjects:FC<ColumnType> = ({topTitle,setProjects, projects, setKey}) => {
 
     return (
         <>
-        <div className="topTitle whiteText p-3" onClick={addNewProject}>
-            <Calendar2PlusFill
-            style={{cursor:"pointer"}} />
-            <span style={{paddingLeft:"10px"}}>Добавить проект</span>
-        {topTitle}</div>
+        {(projects && projects.length < 10)
+        ?
+        <AddProjectsModal setProjects={setProjects} topTitle={topTitle} projects={projects} setKey={setKey}/>
+        :
+        <div className="topTitle whiteText">
+        </div>        
+        }
         </>
     )
 }

@@ -17,6 +17,16 @@ input {
   height: 60px;
 }
 
+.settingProject {
+  background-color:#fff;
+  width: 250px;
+  height: 60px;
+  border-radius: 11px;
+  padding: 10px;
+  cursor: pointer;
+  border: 2px solid #5f5f68;
+}
+
 label {
   position: absolute;
   /* смещение относительно родительского элемента 10px вверх от верхнего края и   10px влево */
@@ -61,6 +71,7 @@ label {
   height: 4vh;
   background-color: #212529;
 }
+
 .TwitterColor {
   margin-left: 20px;
   margin-top: 0px;
@@ -73,6 +84,16 @@ label {
   margin: 400px auto auto auto;
   border-radius: 40px;
   border-color: solid 1px rgb(214, 79, 79);
+  text-align: center;
+}
+
+.modalAdd {
+  width: 700px;
+  height: 400px;
+  background-color: rgb(192, 255, 184);
+  margin: 400px auto auto auto;
+  border-radius: 40px;
+  border-color: solid 1px rgb(76, 211, 128);
   text-align: center;
 }
 
