@@ -18,13 +18,25 @@ input {
 }
 
 .settingProject {
-  background-color:#fff;
+  background-color:#535353;
   width: 250px;
   height: 60px;
   border-radius: 11px;
   padding: 10px;
   cursor: pointer;
   border: 2px solid #5f5f68;
+  color: #fff;
+}
+
+.deleteProject {
+  background-color:#f15454;
+  width: 250px;
+  height: 60px;
+  border-radius: 11px;
+  padding: 10px;
+  cursor: pointer;
+  border: 2px solid #f33434;
+  color: #020202;
 }
 
 label {
@@ -32,7 +44,7 @@ label {
   /* смещение относительно родительского элемента 10px вверх от верхнего края и   10px влево */
   top: -10px;
   left: 10px;
-  background: #dddddd;
+  background: #cef5c4;
   border-radius: 7px;
   border: 1px solid rgba(5, 5, 5, 0.3);
   padding: 0 5px;

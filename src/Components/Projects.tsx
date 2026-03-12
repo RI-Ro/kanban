@@ -25,7 +25,7 @@ function Projects ({topTitle}:{topTitle:string}){
         ]
         )
         // Последняя активная вкладка у пользователя
-        setKey('Домашняя страница')     
+        setKey('')     
     }, []); // Empty array means this runs once on mount
 
     const scrollToLeft= () => {
@@ -37,6 +37,19 @@ function Projects ({topTitle}:{topTitle:string}){
         }
     };
 
+      // Function to handle the deletion
+  const handleDeleteProjectByID = (idToDelete:string) => {
+    // Create a new array that includes all items EXCEPT the one with the matching id
+    if (projects != null) {
+        const updatedList = projects.filter((item) => item.id !== idToDelete);
+        // Update the state with the new array
+        setProjects(updatedList);
+        if (projects.length > 0) {
+            setKey(projects[0].eventkey)
+        }
+    }
+    
+  };
 
 
     return (
@@ -44,7 +57,7 @@ function Projects ({topTitle}:{topTitle:string}){
             <TopTitleProjects topTitle={topTitle} setProjects={setProjects} 
             projects={projects} setKey={setKey}/>
             <div style={{minHeight:"96vh", maxHeight:"96vh", overflowX: "auto", overflowY:"auto",
-            backgroundImage:"url('/images/berezovskoe.jpg')",
+            backgroundImage:"url('/images/kislovodsk.jpg')",
                  backgroundSize: "cover",
                  backgroundRepeat: "no-repeat",
                  backgroundPosition: "center",
@@ -55,7 +68,7 @@ function Projects ({topTitle}:{topTitle:string}){
         (projects && (projects.length > 0)) ?
       <Tabs 
         style={{backgroundColor:"#535353", 
-            fontSize:"16pt"}}
+            fontSize:"16pt", width:"300%"}}
         id="controlled-tabs"
         activeKey={key || ""}
         onSelect={(k) => setKey(k)} // Приведение типа для обработчика
@@ -64,7 +77,7 @@ function Projects ({topTitle}:{topTitle:string}){
         {
          projects.map((proj)=>(
                 <Tab key={proj.id} eventKey={proj.eventkey} title={proj.description}>
-                    <Board scrollToLeft={scrollToLeft} project_id={proj.id} />
+                    <Board scrollToLeft={scrollToLeft} project_id={proj.id} handleDeleteProjectByID={handleDeleteProjectByID}/>
                 </Tab>
             ))
         }

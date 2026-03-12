@@ -156,7 +156,7 @@ const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, delet
         {cards.map((card) => (
           <Card key={card.id} id={card.id} title={card.title}></Card>
         ))}
-        <div style={{minHeight:"10px"}}></div>
+        <div style={{minHeight:"30px"}}></div>
         </div>
 
 <DeleteColumnModal 

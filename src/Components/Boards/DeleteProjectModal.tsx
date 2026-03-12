@@ -5,8 +5,7 @@ import { Button } from 'react-bootstrap';
 Modal.setAppElement('#root');
 
 export type ColumnType = {
-  columnId: string;
-  deleteColumn: Function,
+  deleteProject: Function,
   setDeleteColumnModalIsOpen: Function,
   DeleteColumnModalIsOpen: boolean
 };
@@ -14,8 +13,8 @@ export type ColumnType = {
 var style = {
 }
 
-const DeleteColumnModal: FC<ColumnType> = 
-({deleteColumn, columnId, setDeleteColumnModalIsOpen, DeleteColumnModalIsOpen}) => {
+const DeleteProjectModal: FC<ColumnType> = 
+({deleteProject, setDeleteColumnModalIsOpen, DeleteColumnModalIsOpen}) => {
 
   return (
     <div>
@@ -26,10 +25,10 @@ const DeleteColumnModal: FC<ColumnType> =
         contentLabel="DeleteColumnModal"
       >
         <div style={{minHeight:"100px"}}></div>
-        <h1>Удалить колонку?</h1>
+        <h1>Удалить проект?</h1>
         <div style={{minHeight:"30px"}}></div>
-        <h3>При удалении колонки </h3>
-        <h3>будут удалены все задачи в ней</h3>
+        <h3>При удалении проекта</h3>
+        <h3>будут удалены колонки и все задачи в них!</h3>
         <div style={{minHeight:"30px"}}></div>
                 <div className='row'>
             <div className='col-7'></div>
@@ -44,7 +43,7 @@ const DeleteColumnModal: FC<ColumnType> =
                 fontSize:"18pt",
                 cursor: 'pointer',
             }}
-            onClick={() => deleteColumn(columnId)}>Удалить</Button>
+            onClick={() => deleteProject()}>Удалить</Button>
         </div>
         <div className='col-2'>
         <Button style={{
@@ -67,4 +66,4 @@ const DeleteColumnModal: FC<ColumnType> =
   );
 };
 
-export default DeleteColumnModal;
+export default DeleteProjectModal;

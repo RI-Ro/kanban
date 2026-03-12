@@ -127,7 +127,7 @@ const AddProjectsModal: FC<ColumnType> =
             :
         <div className='col-3'></div>
         }
-        <div className='col-3'>
+        <div className='col-2'>
         <Button style={{
                 marginLeft:"10px",
                 backgroundColor: "#4f4cec",

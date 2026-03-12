@@ -11,15 +11,19 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Column, { ColumnType } from "./Column";
 import { MouseEventHandler, useState } from "react";
-import { ArrowLeftCircle } from "react-bootstrap-icons";
+import { ArrowLeftCircle, Trash3Fill } from "react-bootstrap-icons";
+import DeleteProjectModal from "./DeleteProjectModal";
 
-const Board = ({scrollToLeft, project_id}:{scrollToLeft:MouseEventHandler, project_id:string}) => {
+const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft:MouseEventHandler, project_id:string, handleDeleteProjectByID:Function}) => {
+  
+  const [DeleteColumnModalIsOpen, setDeleteColumnModalIsOpen] = useState(false);
+  
   const data: ColumnType[] = [
     {
       id: "Column1",
       title: "Новые задачи",
-      background:"#e0eceb",
-      borderTop:"rgb(247, 92, 92)",
+      background:"#ecece0",
+      borderTop:"#fce258",
       cards: [
         {
           id: "Card1",
@@ -29,19 +33,19 @@ const Board = ({scrollToLeft, project_id}:{scrollToLeft:MouseEventHandler, proje
       deleteColumn: Function
     },
     {
-      id: "Важные",
-      title: "Важные",
-      background:"#e0eceb",
-      borderTop:"rgb(0, 252, 21)",
+      id: "В работе",
+      title: "В работе",
+      background:"#d0dfc9",
+      borderTop:"#43f861",
       cards: [
       ],
       deleteColumn: Function
     },
     {
-      id: "В работе",
-      title: "В работе",
-      background:"#e0eceb",
-      borderTop:"rgb(209, 7, 7)",
+      id: "Важные",
+      title: "Важные",
+      background:"#ece0e0",
+      borderTop:"#eb3737",
       cards: [
       ],
       deleteColumn: Function
@@ -49,8 +53,8 @@ const Board = ({scrollToLeft, project_id}:{scrollToLeft:MouseEventHandler, proje
     {
       id: "Исполнено",
       title: "Исполнено",
-      background:"#e0eceb",
-      borderTop:"rgb(247, 92, 92)",
+      background:"#e0e8ec",
+      borderTop:"#5089f2",
       cards: [
       ],
       deleteColumn: Function
@@ -195,6 +199,11 @@ const deleteColumn = (ColumnIndex:string) => {
   }
 }
 
+const deleteProject = () => {
+  handleDeleteProjectByID(project_id)
+}
+
+
   return (
     <>
     <DndContext
@@ -206,12 +215,22 @@ const deleteColumn = (ColumnIndex:string) => {
 
       <div
         className="Board"
-        style={{display: "flex", flexDirection: "row", padding: "20px" }}
+        style={{display: "flex", flexDirection: "row", padding: "20px",            
+ }}
       >
+      
+
       
       <div style={{marginRight:"40px",}} >
 
-      <div className="settingProject">Настройки проекта</div>
+      <DeleteProjectModal deleteProject={deleteProject}
+setDeleteColumnModalIsOpen={setDeleteColumnModalIsOpen} 
+DeleteColumnModalIsOpen={DeleteColumnModalIsOpen}
+/>
+
+      <div className="deleteProject" onClick={() => setDeleteColumnModalIsOpen(true)}>
+        <Trash3Fill size="20px" className="me"/>
+        <span style={{marginLeft:"10px"}}>Удалить проект</span></div>
 
       <form onSubmit={AddNewColumn} style={{paddingTop:"30px"}}>
         <div className="input-box"         
