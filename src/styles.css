@@ -34,9 +34,15 @@ input {
   height: 60px;
   border-radius: 11px;
   padding: 10px;
+  font-size: 14pt;
   cursor: pointer;
-  border: 2px solid #f33434;
   color: #020202;
+  box-shadow: 0px 0px 5px 2px rgba(82, 77, 78, 0.5) inset;
+}
+
+.deleteProject:hover {
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 0px 15px 5px rgba(82, 77, 78, 0.5) inset;
 }
 
 label {
@@ -90,23 +96,38 @@ label {
 }
 
 .modalDelete {
+  top: 50%;
+  left: 50%; 
   width: 700px;
   height: 400px;
-  background-color: rgb(240, 147, 135);
+  background-color: rgb(255, 186, 177);
   margin: 400px auto auto auto;
   border-radius: 40px;
-  border-color: solid 1px rgb(214, 79, 79);
   text-align: center;
 }
 
+.modalDelete:hover {
+transition: box-shadow 0.3s ease;
+box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+
 .modalAdd {
+  top: 50%;
+  left: 50%; 
   width: 700px;
   height: 400px;
-  background-color: rgb(192, 255, 184);
+  background-color: rgb(166, 221, 159);
   margin: 400px auto auto auto;
   border-radius: 40px;
-  border-color: solid 1px rgb(76, 211, 128);
   text-align: center;
+}
+.modalAdd:hover {
+transition: box-shadow 0.3s ease;
+box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.75) !important;
 }
 
 .nav-link {
@@ -114,4 +135,70 @@ label {
 }
 .nav-link:hover {
   color: rgb(182, 182, 182);
+}
+
+.customBtnClose {
+  margin-left:10px;
+  background-color: #0d6efd;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  font-size: 18pt;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.customBtnClose:hover {
+  transition: box-shadow 0.3s ease;
+  background-color: #0d6efd;
+  box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+.customBtnClose:active {
+  transform: translateY(1px);
+  transition: box-shadow 0.3s ease;
+  background-color: #0d6efd !important;
+  box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+
+.customBtnDelete {
+  margin-left:10px;
+  background-color: red;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  font-size: 18pt;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.customBtnDelete:hover {
+  background-color: red;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+.customBtnDelete:active {
+  transform: translateY(1px);
+  background-color: red !important;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+
+.customBtnAdd {
+  margin-left:10px;
+  background-color: #008000;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  font-size: 18pt;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.customBtnAdd:hover {
+  background-color: #008000;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
+}
+.customBtnAdd:active {
+  transform: translateY(1px);
+  background-color: #008000 !important;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
 }

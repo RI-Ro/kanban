@@ -18,6 +18,7 @@ const Card: FC<CardType> = ({ id, title }) => {
     background: "white",
     padding: "5px",
     borderRadius: "10px",
+    fontSize:"14pt",
     transform: CSS.Transform.toString(transform)
   };
 

@@ -80,6 +80,8 @@ const AddProjectsModal: FC<ColumnType> =
       // e.g., handleSubmit(value);
     }
   };
+
+
   return (
 
     <>
@@ -112,31 +114,14 @@ const AddProjectsModal: FC<ColumnType> =
             <div className='col-6'></div>
         { (addText.trim().length > 0) ?
         <div className='col-3'>
-            <Button 
-            style={{
-                backgroundColor: "green",
-                color: 'white',
-                padding: '10px 15px',
-                border: 'none',
-                borderRadius: '10px',
-                fontSize:"18pt",
-                cursor: 'pointer',
-            }}
+            <Button className='customBtnAdd'
             onClick={() => addProjects()}>Добавить</Button>
         </div>
             :
         <div className='col-3'></div>
         }
         <div className='col-2'>
-        <Button style={{
-                marginLeft:"10px",
-                backgroundColor: "#4f4cec",
-                color: 'white',
-                padding: '10px 15px',
-                border: 'none',
-                fontSize:"18pt",
-                borderRadius: '10px',
-                cursor: 'pointer',}} 
+        <Button className='customBtnClose'
             onClick={() => setIsOpen(false)}>Закрыть</Button>
         </div>
         </div>

@@ -33,29 +33,11 @@ const DeleteProjectModal: FC<ColumnType> =
                 <div className='row'>
             <div className='col-7'></div>
         <div className='col-2'>
-        <Button 
-            style={{
-                backgroundColor: "red",
-                color: 'white',
-                padding: '10px 15px',
-                border: 'none',
-                borderRadius: '10px',
-                fontSize:"18pt",
-                cursor: 'pointer',
-            }}
+        <Button className='customBtnDelete'
             onClick={() => deleteProject()}>Удалить</Button>
         </div>
         <div className='col-2'>
-        <Button style={{
-                marginLeft:"10px",
-                backgroundColor: "#4f4cec",
-                color: 'white',
-                padding: '10px 15px',
-                border: 'none',
-                fontSize:"18pt",
-                borderRadius: '10px',
-
-                cursor: 'pointer',}} 
+        <Button className='customBtnClose'
             onClick={() => setDeleteColumnModalIsOpen(false)}>Закрыть</Button>
         </div>
         </div>
