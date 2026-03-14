@@ -54,14 +54,21 @@ function Projects ({topTitle}:{topTitle:string}){
 
     return (
         <>
+                    <div style={{maxHeight:"100vh", minHeight:"100vh", 
+                backgroundImage:"url('/images/kislovodsk.jpg')",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center"}}>
             <TopTitleProjects topTitle={topTitle} setProjects={setProjects} 
             projects={projects} setKey={setKey}/>
-            <div style={{minHeight:"96vh", maxHeight:"96vh", overflowX: "auto", overflowY:"auto",
-            backgroundImage:"url('/images/kislovodsk.jpg')",
-                 backgroundSize: "cover",
-                 backgroundRepeat: "no-repeat",
-                 backgroundPosition: "center",
-                 backgroundAttachment: "fixed"}}
+
+            
+            <div style={{maxHeight:"90vh", minHeight:"90vh", 
+            marginTop:"3vh", marginLeft:"3vw", borderRadius:"30px",
+            maxWidth:"79vw", minWidth:"79vw", overflowY:"auto", 
+            backgroundColor:"rgba(255, 255, 255, 0.5)",
+            fontSize:"14pt", overflowX: "auto"
+                }}
                  ref={scrollContainerRef}>
 
     {
@@ -93,7 +100,7 @@ function Projects ({topTitle}:{topTitle:string}){
       </Tabs>
     }
 
-
+</div>
 
             </div>
         </>

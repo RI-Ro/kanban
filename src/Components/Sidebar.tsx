@@ -56,7 +56,7 @@ const style = {
               <NavLink to="/team" className='whiteText'
                 style={({ isActive }) => ({ paddingLeft: isActive ? '10px' : '0px' })} >
                 <BuildingFill className="bi me-2 whiteText" />
-                <span className='whiteText'>Моя компания</span>
+                <span className='whiteText'>Организация</span>
               </NavLink>
             </Nav.Link>
           </Nav.Item>
