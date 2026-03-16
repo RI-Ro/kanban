@@ -76,11 +76,37 @@ body {
   color: white;
 }
 
-.modal-actions button.delete {
+.delete {
   background-color: #f44336;
   color: white;
 }
 
 .modal-actions button[type="button"] {
   background-color: #ccc;
+}
+
+.rbc-month-row {
+  overflow-y: auto;
+}
+
+.rbc-month-view .rbc-event {
+  height: 1.8em;
+  line-height: 1.8em;
+  font-size: 0.9em;
+  padding: 0 5px;
+  margin-bottom: 2px;
+}
+.rbc-event-content {
+  margin-bottom: 2px;
+}
+.rbc-date-cell {
+  padding-top: 2px;
+  font-size: 0.9em;
+  background-color: #f0f0f0;
+}
+.rbc-header {
+  height: 2em;
+}
+.input color {
+  position: relative;
 }

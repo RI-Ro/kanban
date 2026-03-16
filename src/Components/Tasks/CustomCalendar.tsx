@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Calendar, momentLocalizer, EventProps } from 'react-big-calendar';
+import { Calendar, EventProps } from 'react-big-calendar';
+import { dateFnsLocalizer, Formats } from 'react-big-calendar';
 //import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+//import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { format, parse, startOfWeek, getDay} from 'date-fns';
-import { ru } from 'date-fns/locale/ru';
-import { dateFnsLocalizer } from 'react-big-calendar';
+import { ru } from 'date-fns/locale';
 import Modal from 'react-modal';
 import { CalendarEvent } from './types';
 import './styles.css';
@@ -21,8 +21,27 @@ const localizer = dateFnsLocalizer({
   parse,
   startOfWeek,
   getDay,
-  locales,
+  locales: {"ru":ru},
 });
+
+// Кастомные форматы для дат (чтобы гарантировать русский язык)
+const formats: Formats = {
+  monthHeaderFormat: (date: Date) => format(date, 'LLLL yyyy', {locale:ru}), // "март 2026"
+  dayHeaderFormat: (date: Date) => format(date, 'cccc, d MMMM', {locale:ru}), // "понедельник, 16 марта"
+  dayRangeHeaderFormat: ({ start, end }) => 
+    `${format(start, 'd MMMM', {locale:ru})} – ${format(end, 'd MMMM yyyy', {locale:ru})}`,
+  agendaDateFormat: (date: Date) => format(date, 'd MMMM, ccc', {locale:ru}), // "16 марта, пн"
+  agendaTimeFormat: (date: Date) => format(date, 'HH:mm', {locale:ru}), // "10:00"
+  agendaTimeRangeFormat: ({ start, end }) => 
+    `${format(start, 'HH:mm', {locale:ru})} – ${format(end, 'HH:mm', {locale:ru})}`,
+  timeGutterFormat: (date: Date) => format(date, 'HH:mm', {locale:ru}), // 24-часовой формат
+  weekdayFormat: (date: Date) => format(date, 'eeee', {locale:ru}), // дни недели на русском
+  dayFormat: (date: Date) => format(date, 'eeee d', {locale:ru}),
+  eventTimeRangeFormat: ({ start, end }) => 
+    `${format(start, 'HH:mm', {locale:ru})} – ${format(end, 'HH:mm', {locale:ru})}`,
+};
+
+
 
 // Обёртка для Drag-and-Drop
 //const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -34,7 +53,7 @@ const CustomCalendar: React.FC = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([
     {
       id: '1',
-      title: 'Встреча с заказчиком',
+      title: 'Встреча',
       start: new Date(2026, 2, 16, 10, 0),
       end: new Date(2026, 2, 16, 11, 30),
       author: 'Иван Петров',
@@ -42,11 +61,43 @@ const CustomCalendar: React.FC = () => {
     },
     {
       id: '2',
-      title: 'Разработка',
+      title: 'Презентация',
+      start: new Date(2026, 2, 17, 14, 0),
+      end: new Date(2026, 2, 18, 16, 0),
+      author: 'Мария Иванова',
+      color: '#e57373',
+    },
+    {
+      id: '3',
+      title: 'Новости',
+      start: new Date(2026, 2, 16, 10, 0),
+      end: new Date(2026, 2, 23, 11, 30),
+      author: 'Иван Петров',
+      color: '#e2c667',
+    },
+    {
+      id: '4',
+      title: 'Работа над проектом',
       start: new Date(2026, 2, 17, 14, 0),
       end: new Date(2026, 2, 17, 16, 0),
       author: 'Мария Иванова',
-      color: '#e57373',
+      color: '#9ddbb7',
+    },
+    {
+      id: '5',
+      title: 'Поездка на мероприятие',
+      start: new Date(2026, 2, 16, 10, 0),
+      end: new Date(2026, 2, 16, 11, 30),
+      author: 'Арсений Ивановский',
+      color: '#9c5d82',
+    },
+    {
+      id: '6',
+      title: 'Показ нового информационного портала',
+      start: new Date(2026, 2, 17, 14, 0),
+      end: new Date(2026, 2, 17, 16, 0),
+      author: 'Михаил Кучерявый',
+      color: '#a19191',
     },
   ]);
 
@@ -147,21 +198,43 @@ const CustomCalendar: React.FC = () => {
   const EventComponent: React.FC<EventProps<CalendarEvent>> = ({ event }) => (
     <div>
       <strong>{event.title}</strong>
+{/*
+Если открываем тут, то нужно убрать height 1.8em у строк задач.
+Тут коммент, чтобы добавить + more
       <br />
       <small>Автор: {event.author}</small>
+*/}
     </div>
   );
 
+  const workStart = 9;
+  const workEnd = 18;
+  const slotPropGetter = (date: Date) => {
+    const hours = date.getHours();
+    if (hours >= workStart && hours < workEnd) {
+      return {
+        style: {
+          backgroundColor:"#ecffe5",
+        },
+      };
+    }
+    return {};
+  }
+
   return (
-    <div className="app">
+    <div className="app"  style={{}}>
       <h1>Календарь задач</h1>
-      <DragAndDropCalendar
+      <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: "80vh", margin: '40px', backgroundColor:"#fff" }}
+        style={{ height: "80vh", margin: '40px', 
+                  backgroundColor:"#fff",
+                }}
         selectable
+        formats={formats}
+        slotPropGetter={slotPropGetter}
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleSelectEvent}
 //        onEventDrop={handleEventDrop}
@@ -170,8 +243,8 @@ const CustomCalendar: React.FC = () => {
         components={{
           event: EventComponent,
         }}
-        defaultView="week"
-        views={['month', 'week', 'day', 'agenda']}
+        defaultView="month"
+        views={['month', 'week', 'day']}
         messages={{
           week: 'Неделя',
           day: 'День',
@@ -180,6 +253,10 @@ const CustomCalendar: React.FC = () => {
           today: 'Сегодня',
           previous: 'Назад',
           next: 'Вперёд',
+          date: 'Дата',
+          time: 'Время',
+          event: 'Событие',
+          showMore: (total) => `+ ещё ${total}`, 
         }}
       />
 
@@ -224,6 +301,7 @@ const CustomCalendar: React.FC = () => {
             <div className='col-9'>
             <input
               type="color"
+              style={{position:"relative"}}
               value={newEvent.color || '#3174ad'}
               onChange={(e) => setNewEvent({ ...newEvent, color: e.target.value })}
             /></div>
@@ -255,7 +333,7 @@ const CustomCalendar: React.FC = () => {
           <div className="modal-actions">
             <button type="submit">Сохранить</button>
             {selectedEvent && (
-              <button type="button" onClick={handleDeleteEvent} className="delete">
+              <button onClick={handleDeleteEvent} className="delete">
                 Удалить
               </button>
             )}
