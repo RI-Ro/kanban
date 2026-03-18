@@ -32,7 +32,8 @@ interface TreeNode extends Node {
 
 // ==================== Хуки ====================
 
-function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
+function useLocalStorage<T>(key: string, initialValue: T): 
+[T, (value: T | ((val: T) => T)) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       return initialValue;      
@@ -140,7 +141,13 @@ const TreeNodeComponent: React.FC<TreeNodeProps> = ({ node, level = 0 }) => {
 
   return (
     <>
-    <li style={{ listStyle: 'none', marginLeft: level * 20 }}>
+    <li style={{ listStyle: 'none', 
+                marginLeft: level * 20,
+               backgroundColor:"#e0e8ec",
+               borderRadius:"15px",
+               maxHeight:"75vh",
+               overflowY:"auto"
+ }}>
       <div
         style={{
           display: 'flex',
@@ -156,7 +163,7 @@ const TreeNodeComponent: React.FC<TreeNodeProps> = ({ node, level = 0 }) => {
 </span>
         )}
         {(node.type === 'department') ?
-        <span style={{ marginLeft: hasChildren ? 0 : 20 }}>
+        <span style={{ marginLeft: hasChildren ? 0 : 20, fontSize:"16pt" }}>
           🏢 {node.name}
         </span>
         :
@@ -169,11 +176,13 @@ const TreeNodeComponent: React.FC<TreeNodeProps> = ({ node, level = 0 }) => {
         </div>
         <div className='col' >
           {node.type === 'user' && node.email &&  
-          <a href={`mailto:${node.email}?SUBJECT=Reactie`}>📧{node.email}</a>
+          <a href={`mailto:${node.email}?SUBJECT=Сообщение с системы постановки задач`}>📧{node.email}</a>
           }
         </div>
         <div className='col'>
-          {node.type === 'user' && node.number && node.number}
+          {node.type === 'user' && node.number && 
+          <a href={`tel:${node.number}`}>{node.number}</a>
+          }
         </div>
         </div>
         }
@@ -211,7 +220,7 @@ const initialMockData: Node[] = [
   { id: '12', parentId: '2', type: 'user', name: 'Алексей', email: 'alex@example.com' },
   { id: '13', parentId: '2', type: 'user', name: 'Мария' },
   { id: '14', parentId: '5', type: 'user', name: 'Дмитрий' },
-  { id: '15', parentId: '2', type: 'user', name: 'Алексей', email: 'alex@example.com', number:'📞12345'},
+  { id: '15', parentId: '2', type: 'user', name: 'Алексей', email: 'alex@example.com', number:'📞13000'},
   { id: '16', parentId: '2', type: 'user', name: 'Мария' },
   { id: '17', parentId: '5', type: 'user', name: 'Дмитрий' },
   
@@ -220,8 +229,8 @@ const initialMockData: Node[] = [
     id: `dev-${i}`,
     parentId: `${Math.floor(Math.random() * 11)}`,
     type: 'user' as const,
-    name: `Роман ${i + 1}`,
-    doljnost: `Оператор ${i + 1}`,
+    name: `Фамилия Имя Отчество ${i + 1}`,
+    doljnost: `Наименование должности в которой много букв с учетом Разного РЕГИСТРА ${i + 1}`,
     email: `dev${i}@example.com`,
     number: `📞${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}`
   })),
@@ -262,7 +271,7 @@ const TreeItemsTeam: React.FC = () => {
   const tree = useMemo(() => buildTree(filteredData), [filteredData]);
 
   return (
-    <div style={{ padding: 20, fontFamily: 'sans-serif' }}>
+    <div style={{ padding: 20, }}>
       <input
         type="text"
         placeholder="Поиск по имени, email, номеру телефона..."

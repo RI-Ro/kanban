@@ -42,6 +42,7 @@ const style = {
               </NavLink>
             </Nav.Link>
           </Nav.Item>
+          {/*
           <Nav.Item>
             <Nav.Link>
               <NavLink to="/settings-account" className='whiteText' 
@@ -51,6 +52,7 @@ const style = {
               </NavLink>
             </Nav.Link>
           </Nav.Item>
+          */}
           <Nav.Item>
             <Nav.Link>
               <NavLink to="/team" className='whiteText'
@@ -69,6 +71,7 @@ const style = {
               </NavLink>
             </Nav.Link>
           </Nav.Item>
+          {/*
           <Nav.Item>
             <Nav.Link>
               <NavLink to="/statistics" className='whiteText'
@@ -78,6 +81,7 @@ const style = {
               </NavLink>
             </Nav.Link>
           </Nav.Item>
+          */}
       </Nav>
       
     </div>

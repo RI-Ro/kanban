@@ -187,9 +187,10 @@ const CustomCalendar: React.FC = () => {
         backgroundColor: event.color,
         borderRadius: '4px',
         opacity: 0.8,
-        color: 'white',
+        color: '#000',
         border: '0',
         display: 'block',
+        fontSize:"14pt"
       },
     }),
     []
@@ -217,6 +218,12 @@ const CustomCalendar: React.FC = () => {
           backgroundColor:"#ecffe5",
         },
       };
+    } else {
+      return {
+        style: {
+          backgroundColor:"#fde1e1",
+        },
+      };
     }
     return {};
   }
@@ -229,8 +236,8 @@ const CustomCalendar: React.FC = () => {
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: "80vh", margin: '40px', 
-                  backgroundColor:"#fff",
+        style={{ height: "75vh", margin: '30px', 
+                  backgroundColor:"#ffffff",
                 }}
         selectable
         formats={formats}
@@ -331,13 +338,13 @@ const CustomCalendar: React.FC = () => {
             /></div>
           </div>
           <div className="modal-actions">
-            <button type="submit">Сохранить</button>
+            <button className='customBtnAdd'>Сохранить</button>
             {selectedEvent && (
-              <button onClick={handleDeleteEvent} className="delete">
+              <button onClick={handleDeleteEvent} className="customBtnDelete">
                 Удалить
               </button>
             )}
-            <button type="button" onClick={() => setModalIsOpen(false)}>
+            <button  className='customBtnClose' onClick={() => setModalIsOpen(false)}>
               Отмена
             </button>
           </div>
