@@ -29,7 +29,7 @@ const style = {
               <NavLink to="/tasks" className='whiteText'
                 style={({ isActive }) => ({ paddingLeft: isActive ? '10px' : '0px' })} >
                 <Calendar2Week className="bi me-2 whiteText" />
-                <span className='whiteText'>Задачи</span>
+                <span className='whiteText'>Календарь задач</span>
               </NavLink>
             </Nav.Link>
           </Nav.Item>

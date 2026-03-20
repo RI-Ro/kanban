@@ -84,7 +84,8 @@ function Projects ({topTitle}:{topTitle:string}){
         {
          projects.map((proj)=>(
                 <Tab key={proj.id} eventKey={proj.eventkey} title={proj.description}>
-                    <Board scrollToLeft={scrollToLeft} project_id={proj.id} handleDeleteProjectByID={handleDeleteProjectByID}/>
+                    <Board scrollToLeft={scrollToLeft} project_id={proj.id} 
+                    handleDeleteProjectByID={handleDeleteProjectByID}/>
                 </Tab>
             ))
         }

@@ -30,7 +30,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
           title: "Тестовая задача"
         },
       ],
-      deleteColumn: Function
+      deleteColumn: Function,
+      moveToLeft: Function,
+      columnPosition: 0,
     },
     {
       id: "В работе",
@@ -39,7 +41,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       borderTop:"#43f861",
       cards: [
       ],
-      deleteColumn: Function
+      deleteColumn: Function,
+      moveToLeft: Function,
+      columnPosition: 1,
     },
     {
       id: "Важные",
@@ -48,7 +52,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       borderTop:"#eb3737",
       cards: [
       ],
-      deleteColumn: Function
+      deleteColumn: Function,
+      moveToLeft: Function,
+      columnPosition: 2,
     },
     {
       id: "Исполнено",
@@ -57,7 +63,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       borderTop:"#5089f2",
       cards: [
       ],
-      deleteColumn: Function
+      deleteColumn: Function,
+      moveToLeft: Function,
+      columnPosition: 3,
     }
   ];
   const [columns, setColumns] = useState<ColumnType[]>(data);
@@ -181,7 +189,9 @@ const onChangeAddTask = (e: React.ChangeEvent<HTMLInputElement >) => {
       background:"#e0eceb",
       cards: [
       ],
-      deleteColumn: Function
+      deleteColumn: Function,
+      moveToLeft: Function,
+      columnPosition: 0,
     }])
       setaddColumnValue("")
   }
@@ -197,6 +207,23 @@ const deleteColumn = (ColumnIndex:string) => {
   if (position !== -1) {
     setColumns(columns.filter((_, index) => index !== position));
   }
+}
+
+const moveToLeft = (ColumnIndex:string) => {
+  const position = columns.findIndex(item => item.id === ColumnIndex);
+  if (position !== -1) {
+    if (position === 0) return; // Некуда двигать, если элемент первый
+
+    const newItems = [...columns];
+    // Меняем местами текущий элемент (3) и предыдущий (2)
+    [newItems[position - 1], newItems[position]] = [newItems[position], newItems[position - 1]];
+    
+    setColumns(newItems);
+  }
+}
+
+const findIndex = (ColumnIndex:string) => {
+  return columns.findIndex(item => item.id === ColumnIndex);
 }
 
 const deleteProject = () => {
@@ -259,6 +286,8 @@ DeleteColumnModalIsOpen={DeleteColumnModalIsOpen}
             background={column.background}
             cards={column.cards}
             deleteColumn={deleteColumn}
+            moveToLeft={moveToLeft}
+            columnPosition={findIndex(column.id)}
           ></Column>
         ))}
         

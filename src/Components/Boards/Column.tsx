@@ -13,7 +13,9 @@ export type ColumnType = {
   cards: CardType[];
   borderTop: string;
   background: string;
-  deleteColumn: Function
+  deleteColumn: Function;
+  moveToLeft: Function;
+  columnPosition: number
 };
 
 const hexTohex= (hex: string): string => {
@@ -39,7 +41,7 @@ const BACKGROUNDCOLORS = [
 ]
 
 
-const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, deleteColumn }) => {
+const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, deleteColumn, moveToLeft, columnPosition }) => {
   const [borderTopColor, setborderTopColor] = useState(borderTop);
   const [backgroundColor, setBackgroundColor] = useState(background);
   const [visiblePicker, setVisiblePicker] = useState(false);
@@ -81,6 +83,10 @@ const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, delet
     setBackgroundColor(hexTohex(color.hex));
     setborderTopColor(color.hex);
   };
+
+  const changeIndexLeft = () => {
+    moveToLeft(id)
+  }
 
   return (
     <SortableContext id={id} items={cards} strategy={rectSortingStrategy}>
@@ -153,6 +159,9 @@ const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, delet
             </div>
           </div>
         </p>
+        { (columnPosition !== 0) &&
+        <div className="" onClick={changeIndexLeft}>Переместить влево</div>
+        }
         {cards.map((card) => (
           <Card key={card.id} id={card.id} title={card.title}></Card>
         ))}
