@@ -14,6 +14,31 @@ import { MouseEventHandler, useState } from "react";
 import { ArrowLeftCircle, Trash3Fill } from "react-bootstrap-icons";
 import DeleteProjectModal from "./DeleteProjectModal";
 
+function useLocalStorage<T>(key: string, initialValue: T): 
+[T, (value: T | ((val: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+//      return initialValue;      
+      const item = localStorage.getItem(`project_id_${key}`);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue, setValue];
+}
+
 const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft:MouseEventHandler, project_id:string, handleDeleteProjectByID:Function}) => {
   
   const [DeleteColumnModalIsOpen, setDeleteColumnModalIsOpen] = useState(false);
@@ -32,7 +57,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       ],
       deleteColumn: Function,
       moveToLeft: Function,
+      moveToRight: Function,
       columnPosition: 0,
+      isLastPosition: Function,
     },
     {
       id: "В работе",
@@ -43,7 +70,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       ],
       deleteColumn: Function,
       moveToLeft: Function,
+      moveToRight: Function,
       columnPosition: 1,
+      isLastPosition: Function,
     },
     {
       id: "Важные",
@@ -54,7 +83,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       ],
       deleteColumn: Function,
       moveToLeft: Function,
+      moveToRight: Function,
       columnPosition: 2,
+      isLastPosition: Function,    
     },
     {
       id: "Исполнено",
@@ -65,10 +96,15 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       ],
       deleteColumn: Function,
       moveToLeft: Function,
+      moveToRight: Function,
       columnPosition: 3,
+      isLastPosition: Function,    
     }
   ];
-  const [columns, setColumns] = useState<ColumnType[]>(data);
+
+//  const [columns, setColumns] = useState<ColumnType[]>(data);
+
+  const [columns, setColumns] = useLocalStorage<ColumnType[]>(`project_id_${project_id}`, data);
   const [addTaskValue, setaddTaskValue] = useState<string>("");
   const [addColumnValue, setaddColumnValue] = useState<string>("");
 
@@ -191,8 +227,10 @@ const onChangeAddTask = (e: React.ChangeEvent<HTMLInputElement >) => {
       ],
       deleteColumn: Function,
       moveToLeft: Function,
-      columnPosition: 0,
-    }])
+      moveToRight: Function,
+      isLastPosition: Function,
+      columnPosition: 0
+      }])
       setaddColumnValue("")
   }
 }
@@ -217,9 +255,24 @@ const moveToLeft = (ColumnIndex:string) => {
     const newItems = [...columns];
     // Меняем местами текущий элемент (3) и предыдущий (2)
     [newItems[position - 1], newItems[position]] = [newItems[position], newItems[position - 1]];
-    
     setColumns(newItems);
   }
+}
+
+const moveToRight = (ColumnIndex:string) => {
+  const position = columns.findIndex(item => item.id === ColumnIndex);
+  if (position !== -1) {
+    if (position === (columns.length - 1)) return; // Некуда двигать, если элемент последний
+
+    const newItems = [...columns];
+    // Меняем местами текущий элемент (3) и предыдущий (2)
+    [newItems[position + 1], newItems[position]] = [newItems[position], newItems[position + 1]];
+    setColumns(newItems);
+  }
+}
+
+const isLastPosition = (ColumnPosition:number) => {
+  return ColumnPosition === (columns.length-1)
 }
 
 const findIndex = (ColumnIndex:string) => {
@@ -287,7 +340,9 @@ DeleteColumnModalIsOpen={DeleteColumnModalIsOpen}
             cards={column.cards}
             deleteColumn={deleteColumn}
             moveToLeft={moveToLeft}
+            moveToRight={moveToRight}
             columnPosition={findIndex(column.id)}
+            isLastPosition={isLastPosition}
           ></Column>
         ))}
         

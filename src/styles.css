@@ -8,6 +8,7 @@
   position: relative;
 }
 
+
 input {
   background: #fff;
   padding: 10px;
@@ -209,4 +210,17 @@ box-shadow: 0px 0px 30px 5px rgba(82, 77, 78, 0.5) inset;
 
 .mt-n8 {
   margin-top:-3.5rem!important;
+}
+
+.customCircleLeft  {
+  min-height: 32px;
+  min-width: 24px;
+  float: left;
+  margin-left: 5px;
+}
+
+.customCircleRight  {
+  min-height: 32px;
+  min-width: 24px;
+  float: right;
 }

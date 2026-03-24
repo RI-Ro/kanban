@@ -11,21 +11,45 @@ type DataType = {
                 };
 
 
+function useLocalStorage<T>(key: string, initialValue: T): 
+[T, (value: T | ((val: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+//      return initialValue;      
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue, setValue];
+}
+
 
 function Projects ({topTitle}:{topTitle:string}){
     const scrollContainerRef = useRef<HTMLDivElement>(null);
   
     const [key, setKey] = useState<string | null>('home');
 
-    const [projects, setProjects] = useState<DataType[] | null>(null)
+//    const [projects, setProjects] = useState<DataType[] | null>(null)
+    const [projects, setProjects] = useLocalStorage<DataType[]>(`projects_list`, []);
 
     useEffect(() => {
-        setProjects(
-        [
-        ]
-        )
         // Последняя активная вкладка у пользователя
-        setKey('')     
+        if (projects && (projects.length > 0)) {
+            setKey(`${projects[0].id}___${projects[0].eventkey}`)
+        } 
     }, []); // Empty array means this runs once on mount
 
     const scrollToLeft= () => {
@@ -45,7 +69,7 @@ function Projects ({topTitle}:{topTitle:string}){
         // Update the state with the new array
         setProjects(updatedList);
         if (projects.length > 0) {
-            setKey(projects[0].eventkey)
+            setKey(`${projects[0].id}___${projects[0].eventkey}`)
         }
     }
     
@@ -54,7 +78,7 @@ function Projects ({topTitle}:{topTitle:string}){
 
     return (
         <>
-                    <div style={{maxHeight:"100vh", minHeight:"100vh", 
+            <div style={{maxHeight:"100vh", minHeight:"100vh", 
                 backgroundImage:"url('/images/kislovodsk.jpg')",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
@@ -83,7 +107,7 @@ function Projects ({topTitle}:{topTitle:string}){
         >
         {
          projects.map((proj)=>(
-                <Tab key={proj.id} eventKey={proj.eventkey} title={proj.description}>
+                <Tab key={proj.id} eventKey={`${proj.id}___${proj.eventkey}`} title={proj.description}>
                     <Board scrollToLeft={scrollToLeft} project_id={proj.id} 
                     handleDeleteProjectByID={handleDeleteProjectByID}/>
                 </Tab>

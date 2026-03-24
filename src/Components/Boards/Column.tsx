@@ -5,7 +5,7 @@ import Card, { CardType } from "./Card";
 import DeleteColumnModal from './DeleteColumnModal'
 import { GithubPicker, ColorChangeHandler } from 'react-color';
 
-import { ThreeDotsVertical } from 'react-bootstrap-icons'; // Optional: for icons
+import { ThreeDotsVertical, ArrowLeftCircleFill, ArrowRightCircleFill } from 'react-bootstrap-icons'; // Optional: for icons
 
 export type ColumnType = {
   id: string;
@@ -15,7 +15,9 @@ export type ColumnType = {
   background: string;
   deleteColumn: Function;
   moveToLeft: Function;
-  columnPosition: number
+  moveToRight: Function;
+  columnPosition: number;
+  isLastPosition: Function;
 };
 
 const hexTohex= (hex: string): string => {
@@ -41,7 +43,10 @@ const BACKGROUNDCOLORS = [
 ]
 
 
-const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, deleteColumn, moveToLeft, columnPosition }) => {
+const Column: FC<ColumnType> = 
+({ id, title, cards, borderTop, background, 
+  deleteColumn, moveToLeft, moveToRight, columnPosition,
+  isLastPosition }) => {
   const [borderTopColor, setborderTopColor] = useState(borderTop);
   const [backgroundColor, setBackgroundColor] = useState(background);
   const [visiblePicker, setVisiblePicker] = useState(false);
@@ -86,6 +91,10 @@ const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, delet
 
   const changeIndexLeft = () => {
     moveToLeft(id)
+  }
+
+  const changeIndexRight = () => {
+    moveToRight(id)
   }
 
   return (
@@ -159,9 +168,23 @@ const Column: FC<ColumnType> = ({ id, title, cards, borderTop, background, delet
             </div>
           </div>
         </p>
-        { (columnPosition !== 0) &&
-        <div className="" onClick={changeIndexLeft}>Переместить влево</div>
-        }
+        <div className="row">
+          <div className="col-1"></div>
+          { (columnPosition !== 0) ?
+            <div className="col-2" onClick={changeIndexLeft}><ArrowLeftCircleFill className="customCircleLeft bi me-2" 
+                  /></div>
+            :
+            <div className="col-2"></div>
+          }
+          <div className="col-6"></div>
+          { !(isLastPosition(columnPosition)) ?
+            <div className="col-2" onClick={changeIndexRight}><ArrowRightCircleFill className="customCircleRight bi me-2" 
+                  /></div>
+            :
+            <div className="col-2"></div>
+          }
+          <div className="col-1"></div>
+        </div>
         {cards.map((card) => (
           <Card key={card.id} id={card.id} title={card.title}></Card>
         ))}
