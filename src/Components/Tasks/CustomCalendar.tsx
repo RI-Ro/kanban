@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, } from 'react';
 import { Calendar, EventProps } from 'react-big-calendar';
 import { dateFnsLocalizer, Formats } from 'react-big-calendar';
 //import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
@@ -41,7 +41,32 @@ const formats: Formats = {
     `${format(start, 'HH:mm', {locale:ru})} – ${format(end, 'HH:mm', {locale:ru})}`,
 };
 
+// РЕАЛИЗАЦИЯ ХРАНЕНИЯ СОБЫТИЙ В БРАУЗЕРЕ
+function useLocalStorage<T>(key: string, initialValue: T): 
+[T, (value: T | ((val: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+//      return initialValue;      
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
 
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue, setValue];
+}
+//
 
 // Обёртка для Drag-and-Drop
 //const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -50,6 +75,9 @@ const DragAndDropCalendar = Calendar;
 Modal.setAppElement('#root');
 
 const CustomCalendar: React.FC = () => {
+/*
+  const [events, setEvents] = useLocalStorage<CalendarEvent[]>("calendarыы", []);
+*/
   const [events, setEvents] = useState<CalendarEvent[]>([
     {
       id: '1',

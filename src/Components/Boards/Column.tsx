@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect} from "react";
+import { FC, useState, useRef, useEffect, MouseEventHandler, EventHandler, KeyboardEvent, ChangeEvent} from "react";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 import Card, { CardType } from "./Card";
@@ -18,6 +18,8 @@ export type ColumnType = {
   moveToRight: Function;
   columnPosition: number;
   isLastPosition: Function;
+  changeTitle: Function;
+  deleteTask: Function;
 };
 
 const hexTohex= (hex: string): string => {
@@ -46,10 +48,12 @@ const BACKGROUNDCOLORS = [
 const Column: FC<ColumnType> = 
 ({ id, title, cards, borderTop, background, 
   deleteColumn, moveToLeft, moveToRight, columnPosition,
-  isLastPosition }) => {
+  isLastPosition, changeTitle, deleteTask }) => {
   const [borderTopColor, setborderTopColor] = useState(borderTop);
   const [backgroundColor, setBackgroundColor] = useState(background);
   const [visiblePicker, setVisiblePicker] = useState(false);
+  const [cardTitle, setCardTitle] = useState(title);
+  const [canEdit, setCanEdit] = useState(false);
 
   const [DeleteColumnModalIsOpen, setDeleteColumnModalIsOpen] = useState(false);
 
@@ -83,6 +87,32 @@ const Column: FC<ColumnType> =
     };
   }, [visiblePicker]);
 
+   // Ссылка на контейнер пикера TITLE
+  const canEditRef = useRef<HTMLInputElement>(null);
+    // Обработчик клика вне пикера
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      // Если пикер открыт и клик был вне элемента пикера
+      if (
+        canEditRef.current &&
+        event.target instanceof Node &&
+        !canEditRef.current.contains(event.target)
+      ) {
+        setCanEdit(false);
+      }
+    };
+        // Добавляем обработчики только если пикер открыт
+    if (canEdit) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    // Очищаем обработчики при размонтировании или закрытии пикера
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [canEdit]);
 
   const handleChangeColor: ColorChangeHandler = (color) => {
     setBackgroundColor(hexTohex(color.hex));
@@ -97,6 +127,20 @@ const Column: FC<ColumnType> =
     moveToRight(id)
   }
 
+  const onChangeTitle = (event: ChangeEvent<HTMLInputElement>): void => {
+    event.preventDefault()
+    setCardTitle(event.target.value);
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Enter') {
+      setCanEdit(false)
+      changeTitle(id, cardTitle)
+    }
+  };
+
+
+  
   return (
     <SortableContext id={id} items={cards} strategy={rectSortingStrategy}>
       <div
@@ -124,7 +168,17 @@ const Column: FC<ColumnType> =
         >
           <div className="row">
             <div className="col-10">
-              <h4>{title}</h4>
+              {canEdit ?
+              <>
+                <form>
+                  <input style={{maxWidth:"150px"}} ref={canEditRef} type="text" autoFocus
+                  value={cardTitle} onChange={onChangeTitle} onKeyDown={handleKeyDown}/>
+                </form>
+              </>
+              :
+              <h4 onClick={() => setCanEdit(true)}>{cardTitle}</h4>
+              }
+
             </div>
             <div className="col-1">
               {visiblePicker ?
@@ -186,7 +240,9 @@ const Column: FC<ColumnType> =
           <div className="col-1"></div>
         </div>
         {cards.map((card) => (
-          <Card key={card.id} id={card.id} title={card.title}></Card>
+          <Card key={card.id} id={card.id} title={card.title}
+                columnID={id} deleteTask={deleteTask}
+          ></Card>
         ))}
         <div style={{minHeight:"30px"}}></div>
         </div>

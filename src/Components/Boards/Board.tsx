@@ -10,7 +10,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Column, { ColumnType } from "./Column";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { ArrowLeftCircle, Trash3Fill } from "react-bootstrap-icons";
 import DeleteProjectModal from "./DeleteProjectModal";
 
@@ -19,7 +19,7 @@ function useLocalStorage<T>(key: string, initialValue: T):
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
 //      return initialValue;      
-      const item = localStorage.getItem(`project_id_${key}`);
+      const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       return initialValue;
@@ -50,16 +50,14 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       background:"#ecece0",
       borderTop:"#fce258",
       cards: [
-        {
-          id: "Card1",
-          title: "Тестовая задача"
-        },
       ],
       deleteColumn: Function,
       moveToLeft: Function,
       moveToRight: Function,
       columnPosition: 0,
       isLastPosition: Function,
+      changeTitle: Function,
+      deleteTask: Function,
     },
     {
       id: "В работе",
@@ -73,6 +71,8 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       moveToRight: Function,
       columnPosition: 1,
       isLastPosition: Function,
+      changeTitle: Function,
+      deleteTask: Function,
     },
     {
       id: "Важные",
@@ -86,6 +86,8 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       moveToRight: Function,
       columnPosition: 2,
       isLastPosition: Function,    
+      changeTitle: Function,
+      deleteTask: Function,    
     },
     {
       id: "Исполнено",
@@ -98,7 +100,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
       moveToLeft: Function,
       moveToRight: Function,
       columnPosition: 3,
-      isLastPosition: Function,    
+      isLastPosition: Function,
+      changeTitle: Function,
+      deleteTask: Function,    
     }
   ];
 
@@ -107,6 +111,9 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
   const [columns, setColumns] = useLocalStorage<ColumnType[]>(`project_id_${project_id}`, data);
   const [addTaskValue, setaddTaskValue] = useState<string>("");
   const [addColumnValue, setaddColumnValue] = useState<string>("");
+  const [date, setDate] = useState(Date.now())
+
+
 
   const findColumn = (unique: string | null) => {
     if (!unique) {
@@ -200,7 +207,7 @@ const Board = ({scrollToLeft, project_id, handleDeleteProjectByID}:{scrollToLeft
     const addTask = c.get("addTask") as string;
     if (addTask.trim() != "") {
       const updatedData = columns[0].cards;
-      const updatedData2 = [...updatedData, {id:Date.now().toString(), title:addTask}]
+      const updatedData2 = [...updatedData, {id:Date.now().toString(), title:addTask, columnID:columns[0].id, deleteTask:Function}]
       const updateColumn = columns[0]
       updateColumn.cards = updatedData2
       setColumns(data => [...data.slice(0,0), updateColumn, ...data.slice(1)])
@@ -229,7 +236,9 @@ const onChangeAddTask = (e: React.ChangeEvent<HTMLInputElement >) => {
       moveToLeft: Function,
       moveToRight: Function,
       isLastPosition: Function,
-      columnPosition: 0
+      changeTitle: Function,
+      columnPosition: 0,
+      deleteTask: Function,
       }])
       setaddColumnValue("")
   }
@@ -283,6 +292,28 @@ const deleteProject = () => {
   handleDeleteProjectByID(project_id)
 }
 
+const changeTitle = (ColumnIndex:string, newTitle: string) => {
+  const position = columns.findIndex(item => item.id === ColumnIndex);
+  if (position !== -1) {
+    const __columns = columns
+    __columns[position].title = newTitle
+    setColumns(__columns);
+  }
+}
+
+const deleteTask = (taskid:string, ColumnIndex:string) => {
+  const columnposition = columns.findIndex(item => item.id === ColumnIndex);
+  if (columnposition !== -1) {
+    const taskposition = columns[columnposition].cards.findIndex(item => item.id === taskid);
+    if (taskposition !== -1) {
+      const __cards = columns[columnposition].cards.filter((_, index) => index !== taskposition)
+      const __columns = columns
+      __columns[columnposition].cards = __cards
+      setColumns(__columns);
+    }
+  }
+  setDate(Date.now())
+}
 
   return (
     <>
@@ -343,6 +374,8 @@ DeleteColumnModalIsOpen={DeleteColumnModalIsOpen}
             moveToRight={moveToRight}
             columnPosition={findIndex(column.id)}
             isLastPosition={isLastPosition}
+            changeTitle={changeTitle}
+            deleteTask={deleteTask}
           ></Column>
         ))}
         
